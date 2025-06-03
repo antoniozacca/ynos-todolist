@@ -1,35 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import TodoForm from './TodoForm';
+import TodoList from './TodoList';
 
 function App() {
-  const [count, setCount] = useState(0)
+  //inizializzo todos come un'array vuoto
+  const [todos, setTodos] = useState([]);
+  //creo un nuovo oggetto todo con id unico e un testo 
+  function aggiungiTodo(testo) {
+    const nuovoTodo = {
+      id: Date.now(),
+      testo: testo
+    };
+    //lo aggiungo all'inizio dell'array todos
+    setTodos([nuovoTodo, ...todos]);
+  }
+    //elimino un todo filtrando per il suo id
+  function eliminaTodo(id) {
+    const nuovaLista = todos.filter((todo) => todo.id !== id);
+    setTodos(nuovaLista);
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="container mt-5">
+      <h1 className="text-center mb-4">Lista delle cose da fare</h1>
+      {/* includo il componente todoform e passo la funzione todo come prop */}
+      <TodoForm onAggiungi={aggiungiTodo} />
+      {/* includo il componente todolist e passo l'array todos e la funzione di eliminatodo */}
+      <TodoList lista={todos} onElimina={eliminaTodo} />
+    </div>
+  );
 }
 
-export default App
+export default App;
